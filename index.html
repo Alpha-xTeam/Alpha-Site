@@ -985,7 +985,6 @@
             .description {
                 font-size: 12px;
                 letter-spacing: 1px;
-                max-width: 280px;
                 margin-bottom: 25px;
             }
 
@@ -1099,18 +1098,28 @@
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
-            transition: transform 0.1s ease-out;
-            /* Infinite loop carousel - cards are duplicated for seamless continuous scrolling */
-            /* JavaScript handles the seamless reset from last card to first card */
+            /* Infinite scroll animation */
+            animation: infiniteScroll 30s linear infinite;
         }
 
-        .carousel-track:active {
+        @keyframes infiniteScroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }        .carousel-track:active {
             cursor: grabbing;
         }
 
         .carousel-track.dragging {
-            transition: none !important;
             cursor: grabbing !important;
+            animation-play-state: paused !important;
         }
 
         .carousel-track img {
@@ -1119,6 +1128,19 @@
             -khtml-user-drag: none;
             -moz-user-drag: none;
             -o-user-drag: none;
+        }
+
+        /* Responsive animations */
+        @media (max-width: 768px) {
+            .carousel-track {
+                animation-duration: 25s;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carousel-track {
+                animation-duration: 20s;
+            }
         }
 
         /* Enhanced team card cursor for better UX */
@@ -1400,6 +1422,327 @@
                 transform: translateY(-8px);
             }
         }
+
+        /* Departments Section Styles */
+        .departments-section {
+            position: relative;
+            z-index: 3;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 80px 0;
+            overflow: hidden;
+        }
+
+        .departments-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(226, 28, 52, 0.05) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .departments-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .departments-header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideUpFade 0.8s ease-out both;
+        }
+
+        .departments-title {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 700;
+            color: white;
+            letter-spacing: 2px;
+            margin-bottom: 0;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }        .departments-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: slideUpFadeScale 0.8s ease-out 0.3s both;
+        }
+
+        .department-card {
+            position: relative;
+            height: 180px;
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }        .department-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .card-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: transform 0.4s ease;
+        }
+
+        .department-card:hover .card-background {
+            transform: scale(1.05);
+        }
+
+        .cyber-security .card-background {
+            background-image: linear-gradient(135deg, rgba(0, 150, 255, 0.1), rgba(0, 100, 200, 0.2)), 
+                              url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+        }
+
+        .software .card-background {
+            background-image: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(75, 0, 130, 0.2)), 
+                              url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+        }
+
+        .network .card-background {
+            background-image: linear-gradient(135deg, rgba(0, 255, 127, 0.1), rgba(0, 128, 128, 0.2)), 
+                              url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+            transition: all 0.4s ease;
+        }
+
+        .department-card:hover .card-overlay {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
+        }        .card-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 40px;
+        }        .department-title {
+            font-size: clamp(24px, 3vw, 36px);
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            line-height: 1.1;
+            flex: 1;
+        }
+
+        .road-map-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: fit-content;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .road-map-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-icon {
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .road-map-btn:hover .btn-icon {
+            transform: translateX(3px);
+        }
+
+        /* Specific department color accents */
+        .cyber-security:hover .road-map-btn {
+            background: rgba(0, 150, 255, 0.2);
+            border-color: rgba(0, 150, 255, 0.4);
+            box-shadow: 0 4px 16px rgba(0, 150, 255, 0.2);
+        }
+
+        .software:hover .road-map-btn {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: rgba(138, 43, 226, 0.4);
+            box-shadow: 0 4px 16px rgba(138, 43, 226, 0.2);
+        }
+
+        .network:hover .road-map-btn {
+            background: rgba(0, 255, 127, 0.2);
+            border-color: rgba(0, 255, 127, 0.4);
+            box-shadow: 0 4px 16px rgba(0, 255, 127, 0.2);
+        }        /* Responsive Design for Departments Section */
+        @media (max-width: 1200px) {
+            .departments-container {
+                padding: 0 30px;
+            }
+
+            .departments-grid {
+                gap: 20px;
+                max-width: 700px;
+            }
+
+            .department-card {
+                height: 160px;
+            }
+
+            .card-content {
+                padding: 25px 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .departments-section {
+                padding: 60px 0;
+            }
+
+            .departments-container {
+                padding: 0 20px;
+            }
+
+            .departments-header {
+                margin-bottom: 40px;
+            }
+
+            .departments-title {
+                font-size: clamp(28px, 6vw, 40px);
+                letter-spacing: 1px;
+            }
+
+            .departments-grid {
+                gap: 18px;
+                max-width: 100%;
+            }
+
+            .department-card {
+                height: 140px;
+                border-radius: 12px;
+            }
+
+            .card-content {
+                padding: 20px 25px;
+                flex-direction: row;
+            }
+
+            .department-title {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+
+            .road-map-btn {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            .department-card:hover {
+                transform: translateY(-3px) scale(1.005);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .departments-section {
+                padding: 50px 0;
+            }
+
+            .departments-container {
+                padding: 0 15px;
+            }
+
+            .departments-header {
+                margin-bottom: 30px;
+            }
+
+            .departments-title {
+                font-size: clamp(24px, 7vw, 32px);
+            }
+
+            .departments-grid {
+                gap: 15px;
+            }
+
+            .department-card {
+                height: 120px;
+                border-radius: 10px;
+            }
+
+            .card-content {
+                padding: 15px 20px;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .department-title {
+                font-size: clamp(16px, 5vw, 20px);
+                flex: none;
+            }
+
+            .road-map-btn {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+
+        /* Animation Keyframes for Department Section */
+        @keyframes departmentSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .department-card {
+            animation: departmentSlideUp 0.6s ease-out both;
+        }
+
+        .department-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .department-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .department-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
     </style>
 </head>
 
@@ -1408,10 +1751,10 @@
         <div class="navbar-logo">
             <div class="navbar-logo-icon"></div>
             <div class="navbar-logo-text">Alpha</div>
-        </div>
-        <div class="navbar-menu">
+        </div>        <div class="navbar-menu">
             <a href="#" class="active">Home</a>
             <a href="#about">About</a>
+            <a href="#departments">Departments</a>
             <a href="#">News</a>
             <a href="#">Tools</a>
         </div>
@@ -1533,82 +1876,56 @@
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">DEVELOPER</span>
+                            <span class="team-role">DESIGNER</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/zyfjcos1xkgtrixnwfia.jpg"
-                                alt="Developer" class="lazy-load" loading="lazy">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                                alt="Designer" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Hussien<br>Mohammed</h3>
+                            <h3 class="member-name">Sara<br>Mohammed</h3>
                         </div>
                     </div>
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">MEDIA</span>
+                            <span class="team-role">DESIGNER</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/xzlcssrx6wpjy7rwpbg8.jpg"
-                                alt="MEDIA" class="lazy-load" loading="lazy">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                                alt="Designer" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Ayham<br>Mahdi</h3>
+                            <h3 class="member-name">Lina<br>Ali</h3>
                         </div>
                     </div>
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">MEDIA</span>
+                            <span class="team-role">MANAGER</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748618880/qwbvrxcuo700z8zdqi2g.jpg"
-                                alt="MEDIA" class="lazy-load" loading="lazy">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                                alt="Manager" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Elaf<br>Mohammed</h3>
+                            <h3 class="member-name">Omar<br>Samir</h3>
+                        </div>
+                    </div>                    <div class="team-card">
+                        <div class="card-header">
+                            <span class="team-role">MANAGER</span>
+                        </div>
+                        <div class="card-image">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                                alt="Manager" class="lazy-load" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <h3 class="member-name">Nour<br>Hossam</h3>
                         </div>
                     </div>
 
+                    <!-- Duplicate cards for infinite scroll -->
                     <div class="team-card">
-                        <div class="card-header">
-                            <span class="team-role">MEDIA</span>
-                        </div>
-                        <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/gt1tologlhpmtor694nk.jpg"
-                                alt="MEDIA" class="lazy-load" loading="lazy">
-                        </div>
-                        <div class="card-info">
-                            <h3 class="member-name">Saif<br>Hussam</h3>
-                        </div>
-                    </div>
-
-                    <div class="team-card">
-                        <div class="card-header">
-                            <span class="team-role">MEDIA</span>
-                        </div>
-                        <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/wg9xa205iy3oxgknzome.jpg"
-                                alt="MEDIA" class="lazy-load" loading="lazy">
-                        </div>
-                        <div class="card-info">
-                            <h3 class="member-name">Aws<br>Yaas</h3>
-                        </div>
-                    </div>
-
-                    <div class="team-card">
-                        <div class="card-header">
-                            <span class="team-role">MEDIA</span>
-                        </div>
-                        <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/wqltditgxyk9skpksxxo.jpg"
-                                alt="MEDIA" class="lazy-load" loading="lazy">
-                        </div>
-                        <div class="card-info">
-                            <h3 class="member-name">Sajad<br>Firas</h3>
-                        </div>
-                    </div> <!-- Duplicate all 11 cards for seamless infinite loop -->
-                   <div class="team-card">
                         <div class="card-header">
                             <span class="team-role leader">TEAM LEADER</span>
                         </div>
@@ -1675,78 +1992,53 @@
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">DEVELOPER</span>
+                            <span class="team-role">DESIGNER</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/zyfjcos1xkgtrixnwfia.jpg"
-                                alt="Developer" class="lazy-load" loading="lazy">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                                alt="Designer" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Hussien<br>Mohammed</h3>
+                            <h3 class="member-name">Sara<br>Mohammed</h3>
                         </div>
                     </div>
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">MEDIA</span>
+                            <span class="team-role">DESIGNER</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/xzlcssrx6wpjy7rwpbg8.jpg"
-                                alt="MEDIA" class="lazy-load" loading="lazy">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                                alt="Designer" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Ayham<br>Mahdi</h3>
+                            <h3 class="member-name">Lina<br>Ali</h3>
                         </div>
                     </div>
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">MEDIA</span>
+                            <span class="team-role">MANAGER</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748618880/qwbvrxcuo700z8zdqi2g.jpg"
-                                alt="MEDIA" class="lazy-load" loading="lazy">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                                alt="Manager" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Elaf<br>Mohammed</h3>
+                            <h3 class="member-name">Omar<br>Samir</h3>
                         </div>
                     </div>
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">MEDIA</span>
+                            <span class="team-role">MANAGER</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/gt1tologlhpmtor694nk.jpg"
-                                alt="MEDIA" class="lazy-load" loading="lazy">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                                alt="Manager" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Saif<br>Hussam</h3>
-                        </div>
-                    </div>
-
-                    <div class="team-card">
-                        <div class="card-header">
-                            <span class="team-role">MEDIA</span>
-                        </div>
-                        <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/wg9xa205iy3oxgknzome.jpg"
-                                alt="MEDIA" class="lazy-load" loading="lazy">
-                        </div>
-                        <div class="card-info">
-                            <h3 class="member-name">Aws<br>Yaas</h3>
-                        </div>
-                    </div>
-
-                    <div class="team-card">
-                        <div class="card-header">
-                            <span class="team-role">MEDIA</span>
-                        </div>
-                        <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/wqltditgxyk9skpksxxo.jpg"
-                                alt="MEDIA" class="lazy-load" loading="lazy">
-                        </div>                        <div class="card-info">
-                            <h3 class="member-name">Sajad<br>Firas</h3>
+                            <h3 class="member-name">Nour<br>Hossam</h3>
                         </div>
                     </div>
                 </div>
@@ -1754,369 +2046,155 @@
         </div>
     </section>
 
+    <!-- Departments Section -->
+    <section class="departments-section" id="departments">
+        <div class="departments-container">
+            <div class="departments-header">
+                <h2 class="departments-title">Choose your <br>department</h2>
+            </div>
+
+            <div class="departments-grid">
+                <div class="department-card cyber-security">
+                    <div class="card-background"></div>
+                    <div class="card-overlay"></div>
+                    <div class="card-content">
+                        <h3 class="department-title">Cyber Security</h3>
+                        <a href="#" class="road-map-btn">
+                            <span>View Roadmap</span>
+                            <i class="btn-icon">→</i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="department-card software">
+                    <div class="card-background"></div>
+                    <div class="card-overlay"></div>
+                    <div class="card-content">
+                        <h3 class="department-title">Software Development</h3>
+                        <a href="#" class="road-map-btn">
+                            <span>View Roadmap</span>
+                            <i class="btn-icon">→</i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="department-card network">
+                    <div class="card-background"></div>
+                    <div class="card-overlay"></div>
+                    <div class="card-content">
+                        <h3 class="department-title">Network Engineering</h3>
+                        <a href="#" class="road-map-btn">
+                            <span>View Roadmap</span>
+                            <i class="btn-icon">→</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
     <script>
-        // Hamburger menu toggle
+        // Mobile menu toggle
         const hamburger = document.querySelector('.hamburger');
         const navbarMenu = document.querySelector('.navbar-menu');
 
         hamburger.addEventListener('click', () => {
             hamburger.classList.toggle('active');
             navbarMenu.classList.toggle('active');
-        });
-
-        // Close menu when clicking on a link
-        const navLinks = document.querySelectorAll('.navbar-menu a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navbarMenu.classList.remove('active');
-            });
-        });        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navbarMenu.contains(e.target)) {
-                hamburger.classList.remove('active');
-                navbarMenu.classList.remove('active');
-            }
-        });        // Enhanced Infinite Loop Carousel functionality
+        });        // Carousel functionality with infinite scroll
         const carouselTrack = document.getElementById('carouselTrack');
-        let isScrolling = true;
-        let animationId;
-        let currentTransform = 0;
-        const scrollSpeed = 1.0; // Optimized speed for smooth infinite loop
+        let isDragging = false;
+        let startX, scrollLeft;
+        let animationPaused = false;
 
-        // Calculate exact dimensions for seamless infinite loop
-        const cardWidth = 320; // Card width
-        const cardGap = 30; // Gap between cards
-        const cardWithGap = cardWidth + cardGap;
-        const totalOriginalCards = 11;
-        const totalCards = totalOriginalCards * 2; // Including duplicates
-        const resetPoint = -(cardWithGap * totalOriginalCards);
-
-        function autoScroll() {
-            if (isScrolling) {
-                currentTransform -= scrollSpeed;
-
-                // Perfect seamless reset: when we reach the end of original cards, instantly reset to start
-                // This creates a true infinite loop effect
-                if (currentTransform <= resetPoint) {
-                    currentTransform = 0;
-                }
-
-                // Apply the transform for smooth movement
-                carouselTrack.style.transform = `translate3d(${currentTransform}px, 0, 0)`;
-            }
-
-            animationId = requestAnimationFrame(autoScroll);
-        }
-
-        // Initialize the carousel immediately for instant infinite scroll
-        autoScroll();        // Intersection Observer for better performance with infinite loop support
-        const carouselObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    if (!animationId) {
-                        autoScroll();
-                    }
-                } else {
-                    if (animationId) {
-                        cancelAnimationFrame(animationId);
-                        animationId = null;
-                        isScrolling = false;
-                    }
-                }
-            });
-        }, { threshold: 0.1 });
-
-        // Start observing the carousel with enhanced initialization
-        if (carouselTrack) {
-            carouselObserver.observe(carouselTrack);
-            
-            // Immediate initialization for instant infinite scroll
-            setTimeout(() => {
-                if (!animationId) {
-                    isScrolling = true;
-                    autoScroll();
-                }
-            }, 100);
-        }
-
-        // Enhanced pause on hover with infinite loop continuity
+        // Pause animation on hover
         carouselTrack.addEventListener('mouseenter', () => {
-            isScrolling = false;
+            carouselTrack.style.animationPlayState = 'paused';
+            animationPaused = true;
         });
 
         carouselTrack.addEventListener('mouseleave', () => {
-            // Resume scrolling immediately when leaving hover area
-            setTimeout(() => {
-                isScrolling = true;
-            }, 300);
-        });        // Enhanced mouse and touch drag functionality with infinite loop support
-        let startX = 0;
-        let isDragging = false;
-        let lastMoveX = 0;
-        let isMouseDown = false;
-
-        // Helper function to normalize transform within infinite loop bounds
-        function normalizeTransform(transform) {
-            // Keep the transform within the infinite loop range
-            while (transform <= resetPoint) {
-                transform += Math.abs(resetPoint);
+            if (!isDragging) {
+                carouselTrack.style.animationPlayState = 'running';
+                animationPaused = false;
             }
-            while (transform > 0) {
-                transform -= Math.abs(resetPoint);
-            }
-            return transform;
-        }        // Team Card functionality - simplified without contact buttons
-        function initializeTeamCards() {
-            const teamCards = document.querySelectorAll('.team-card');
-            console.log(`Found ${teamCards.length} team cards`);
-            
-            // Remove any existing contact buttons
-            teamCards.forEach((card, index) => {
-                const existingBtn = card.querySelector('.contact-btn');
-                if (existingBtn) {
-                    existingBtn.remove();
-                }
-            });
-        }        // Initialize team cards after a short delay to ensure DOM is ready
-        setTimeout(() => {
-            initializeTeamCards();
-            console.log('Team cards initialized - contact buttons removed');
-        }, 1000);        // Enhanced Mouse Drag functionality for desktop
-        let dragStartTime = 0;
-        let totalDragDistance = 0;
+        });
 
         carouselTrack.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            startX = e.clientX;
-            lastMoveX = startX;
-            isMouseDown = true;
-            isDragging = false;
-            isScrolling = false;
-            dragStartTime = Date.now();
-            totalDragDistance = 0;
-            
+            isDragging = true;
+            startX = e.pageX - carouselTrack.offsetLeft;
+            scrollLeft = carouselTrack.scrollLeft;
             carouselTrack.classList.add('dragging');
-            carouselTrack.style.cursor = 'grabbing';
-            carouselTrack.style.userSelect = 'none';
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (!isMouseDown) return;
-            e.preventDefault();
-
-            const currentX = e.clientX;
-            const moveDiff = lastMoveX - currentX;
-            
-            // Start dragging immediately on any movement
-            if (Math.abs(moveDiff) > 2) {
-                isDragging = true;
-                totalDragDistance += Math.abs(moveDiff);
-            }
-            
-            if (isDragging) {
-                // Smooth and responsive dragging with enhanced sensitivity
-                currentTransform -= moveDiff * 1.5;
-
-                // Normalize transform to maintain infinite loop
-                currentTransform = normalizeTransform(currentTransform);
-
-                carouselTrack.style.transform = `translate3d(${currentTransform}px, 0, 0)`;
-            }
-            
-            lastMoveX = currentX;
-        });
-
-        document.addEventListener('mouseup', () => {
-            if (isMouseDown) {
-                isMouseDown = false;
-                carouselTrack.classList.remove('dragging');
-                carouselTrack.style.cursor = 'grab';
-                carouselTrack.style.userSelect = '';
-                
-                // Add momentum/inertia effect
-                const dragDuration = Date.now() - dragStartTime;
-                const velocity = totalDragDistance / Math.max(dragDuration, 1);
-                
-                if (isDragging && velocity > 0.3) {
-                    // Add smooth momentum scrolling
-                    let momentum = velocity * 40;
-                    const deceleration = 0.94;
-                    
-                    function momentumScroll() {
-                        if (momentum > 1) {
-                            currentTransform -= momentum;
-                            currentTransform = normalizeTransform(currentTransform);
-                            carouselTrack.style.transform = `translate3d(${currentTransform}px, 0, 0)`;
-                            momentum *= deceleration;
-                            requestAnimationFrame(momentumScroll);
-                        } else {
-                            // Resume auto-scroll after momentum ends
-                            setTimeout(() => {
-                                isDragging = false;
-                                isScrolling = true;
-                            }, 800);
-                        }
-                    }
-                    momentumScroll();
-                } else {
-                    // Resume auto-scroll immediately if no momentum
-                    setTimeout(() => {
-                        isDragging = false;
-                        isScrolling = true;
-                    }, 1000);
-                }
-            }
-        });
-
-        // Enhanced wheel scrolling for better mouse interaction
-        carouselTrack.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            
-            // Pause auto-scroll during wheel interaction
-            isScrolling = false;
-            
-            // Apply wheel delta for smooth scrolling
-            const wheelDelta = e.deltaY * 2;
-            currentTransform -= wheelDelta;
-            currentTransform = normalizeTransform(currentTransform);
-            
-            carouselTrack.style.transform = `translate3d(${currentTransform}px, 0, 0)`;
-            
-            // Resume auto-scroll after wheel interaction stops
-            clearTimeout(carouselTrack.wheelTimeout);
-            carouselTrack.wheelTimeout = setTimeout(() => {
-                isScrolling = true;
-            }, 1500);
-        }, { passive: false });
-
-        // Prevent drag on images and text selection
-        carouselTrack.addEventListener('dragstart', (e) => {
-            e.preventDefault();
-        });        // Set initial cursor style and add visual feedback
-        carouselTrack.style.cursor = 'grab';
-
-        // Add hover effects for better user feedback
-        carouselTrack.addEventListener('mouseenter', () => {
-            if (!isDragging && !isMouseDown) {
-                carouselTrack.style.cursor = 'grab';
-            }
+            carouselTrack.style.animationPlayState = 'paused';
         });
 
         carouselTrack.addEventListener('mouseleave', () => {
-            if (!isMouseDown) {
-                carouselTrack.style.cursor = 'grab';
-            }
-        });        // Enhanced Touch events for mobile devices with improved responsiveness
-        carouselTrack.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            lastMoveX = startX;
-            isDragging = false;
-            isScrolling = false;
-            totalDragDistance = 0;
-            dragStartTime = Date.now();
-            
-            carouselTrack.classList.add('dragging');
-        }, { passive: true });
-
-        carouselTrack.addEventListener('touchmove', (e) => {
-            const currentX = e.touches[0].clientX;
-            const moveDiff = lastMoveX - currentX;
-            
-            if (Math.abs(moveDiff) > 1) {
-                isDragging = true;
-                totalDragDistance += Math.abs(moveDiff);
-            }
-            
             if (isDragging) {
-                currentTransform -= moveDiff * 1.2;
-                currentTransform = normalizeTransform(currentTransform);
-                carouselTrack.style.transform = `translate3d(${currentTransform}px, 0, 0)`;
-            }
-            
-            lastMoveX = currentX;
-        }, { passive: true });
-
-        carouselTrack.addEventListener('touchend', () => {
-            carouselTrack.classList.remove('dragging');
-            
-            // Add momentum for touch devices too
-            const dragDuration = Date.now() - dragStartTime;
-            const velocity = totalDragDistance / Math.max(dragDuration, 1);
-            
-            if (isDragging && velocity > 0.2) {
-                let momentum = velocity * 30;
-                const deceleration = 0.92;
-                
-                function touchMomentum() {
-                    if (momentum > 1) {
-                        currentTransform -= momentum;
-                        currentTransform = normalizeTransform(currentTransform);
-                        carouselTrack.style.transform = `translate3d(${currentTransform}px, 0, 0)`;
-                        momentum *= deceleration;
-                        requestAnimationFrame(touchMomentum);
-                    } else {
-                        setTimeout(() => {
-                            isDragging = false;
-                            isScrolling = true;
-                        }, 600);
-                    }
+                isDragging = false;
+                carouselTrack.classList.remove('dragging');
+                if (!animationPaused) {
+                    carouselTrack.style.animationPlayState = 'running';
                 }
-                touchMomentum();
-            } else {
-                setTimeout(() => {
-                    isDragging = false;
-                    isScrolling = true;
-                }, 800);
             }
         });
 
-        // Lazy Loading Implementation
-        const lazyImages = document.querySelectorAll('.lazy-load');
+        carouselTrack.addEventListener('mouseup', () => {
+            isDragging = false;
+            carouselTrack.classList.remove('dragging');
+            setTimeout(() => {
+                if (!animationPaused) {
+                    carouselTrack.style.animationPlayState = 'running';
+                }
+            }, 500);
+        });
 
-        const imageObserver = new IntersectionObserver((entries) => {
+        carouselTrack.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - carouselTrack.offsetLeft;
+            const walk = (x - startX) * 2;
+            carouselTrack.scrollLeft = scrollLeft - walk;
+        });
+
+        // Touch events for mobile
+        carouselTrack.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].pageX - carouselTrack.offsetLeft;
+            scrollLeft = carouselTrack.scrollLeft;
+            carouselTrack.style.animationPlayState = 'paused';
+        });
+
+        carouselTrack.addEventListener('touchend', () => {
+            isDragging = false;
+            setTimeout(() => {
+                carouselTrack.style.animationPlayState = 'running';
+            }, 500);
+        });
+
+        carouselTrack.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const x = e.touches[0].pageX - carouselTrack.offsetLeft;
+            const walk = (x - startX) * 2;
+            carouselTrack.scrollLeft = scrollLeft - walk;
+        });
+
+        // Lazy loading images
+        const lazyLoadImages = document.querySelectorAll('.lazy-load');
+        const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const img = entry.target;
-                    const src = img.getAttribute('data-src');
-
-                    if (src) {
-                        img.src = src;
-                        img.classList.add('loaded');
-                        img.removeAttribute('data-src');
-                        imageObserver.unobserve(img);
-                    }
+                    img.src = img.dataset.src;
+                    img.classList.add('loaded');
+                    observer.unobserve(img);
                 }
             });
-        }, {
-            threshold: 0.1,
-            rootMargin: '50px'
         });
 
-        lazyImages.forEach(img => {
-            imageObserver.observe(img);
+        lazyLoadImages.forEach(image => {
+            imageObserver.observe(image);
         });
-
-        // Reduce animations on low-end devices
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduceMotion) {
-            document.documentElement.style.setProperty('--animation-duration', '0s');
-            isScrolling = false;
-        }
-
-        // Performance optimization for About section
-        const aboutSection = document.querySelector('.about-section');
-        if (aboutSection) {
-            const aboutObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate');
-                    }
-                });
-            }, { threshold: 0.2 });
-
-            aboutObserver.observe(aboutSection);
-        }
     </script>
 </body>
 
