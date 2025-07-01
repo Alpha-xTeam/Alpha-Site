@@ -1098,16 +1098,17 @@
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
-            /* Infinite scroll animation */
-            animation: infiniteScroll 30s linear infinite;
+            /* Infinite scroll animation - seamless loop */
+            animation: infiniteScroll 60s linear infinite;
         }
 
+        /* Seamless infinite scroll animation */
         @keyframes infiniteScroll {
             0% {
                 transform: translateX(0);
             }
             100% {
-                transform: translateX(-50%);
+                transform: translateX(calc(-350px * 11)); /* Move exactly one set of cards */
             }
         }
 
@@ -1130,16 +1131,67 @@
             -o-user-drag: none;
         }
 
-        /* Responsive animations */
+        /* Ensure smooth infinite scroll */
+        .carousel-container {
+            mask: linear-gradient(to right, transparent, black 50px, black calc(100% - 50px), transparent);
+            -webkit-mask: linear-gradient(to right, transparent, black 50px, black calc(100% - 50px), transparent);
+        }
+
+        /* Enhanced performance for smooth animation */
+        .carousel-track {
+            backface-visibility: hidden;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .team-card {
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }/* Responsive animations */
+        @media (max-width: 1200px) {
+            .carousel-track {
+                animation-duration: 50s;
+            }
+            
+            @keyframes infiniteScroll {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(calc(-310px * 11)); /* Adjusted for smaller cards */
+                }
+            }
+        }
+
         @media (max-width: 768px) {
             .carousel-track {
-                animation-duration: 25s;
+                animation-duration: 45s;
+                gap: 20px;
+            }
+            
+            @keyframes infiniteScroll {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(calc(-280px * 11)); /* Adjusted for mobile cards */
+                }
             }
         }
 
         @media (max-width: 480px) {
             .carousel-track {
-                animation-duration: 20s;
+                animation-duration: 40s;
+                gap: 15px;
+            }
+            
+            @keyframes infiniteScroll {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(calc(-235px * 11)); /* Adjusted for smallest cards */
+                }
             }
         }
 
@@ -1809,7 +1861,7 @@
 
             <div class="carousel-container">
                 <div class="carousel-track" id="carouselTrack"> <!-- Team Member Cards -->
-                    <div class="team-card">
+                  <div class="team-card">
                         <div class="card-header">
                             <span class="team-role leader">TEAM LEADER</span>
                         </div>
@@ -1847,6 +1899,18 @@
                             <h3 class="member-name">Hasan<br>Ali</h3>
                         </div>
                     </div>
+                    <div class="team-card">
+                        <div class="card-header">
+                            <span class="team-role">DEVELOPER</span>
+                        </div>
+                        <div class="card-image">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/zyfjcos1xkgtrixnwfia.jpg"
+                                alt="Developer" class="lazy-load" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <h3 class="member-name">Hussien<br>Mohammed</h3>
+                        </div>
+                    </div>
 
                     <div class="team-card">
                         <div class="card-header">
@@ -1876,53 +1940,69 @@
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">DESIGNER</span>
+                            <span class="team-role">MEDIA</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748618880/qwbvrxcuo700z8zdqi2g.jpg"
                                 alt="Designer" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Sara<br>Mohammed</h3>
+                            <h3 class="member-name">Elaf<br>Mohammed</h3>
                         </div>
                     </div>
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">DESIGNER</span>
+                            <span class="team-role">MEDIA</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/gt1tologlhpmtor694nk.jpg"
                                 alt="Designer" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Lina<br>Ali</h3>
+                            <h3 class="member-name">Saif<br>Hussam</h3>
                         </div>
                     </div>
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">MANAGER</span>
+                            <span class="team-role">MEDIA</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
-                                alt="Manager" class="lazy-load" loading="lazy">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/wqltditgxyk9skpksxxo.jpg"
+                                alt="MEDIA" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Omar<br>Samir</h3>
-                        </div>
-                    </div>                    <div class="team-card">
-                        <div class="card-header">
-                            <span class="team-role">MANAGER</span>
-                        </div>
-                        <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
-                                alt="Manager" class="lazy-load" loading="lazy">
-                        </div>
-                        <div class="card-info">
-                            <h3 class="member-name">Nour<br>Hossam</h3>
+                            <h3 class="member-name">Sajad<br>Firas</h3>
                         </div>
                     </div>
+
+                     <div class="team-card">
+                        <div class="card-header">
+                            <span class="team-role">MEDIA</span>
+                        </div>
+                        <div class="card-image">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/xzlcssrx6wpjy7rwpbg8.jpg"
+                                alt="MEDIA" class="lazy-load" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <h3 class="member-name">Ayham<br>Mahdi</h3>
+                        </div>
+                    </div>
+
+                    <div class="team-card">
+                        <div class="card-header">
+                            <span class="team-role">MEDIA</span>
+                        </div>
+                        <div class="card-image">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/wg9xa205iy3oxgknzome.jpg"
+                                alt="MEDIA" class="lazy-load" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <h3 class="member-name">Aws<br>Yaas</h3>
+                        </div>
+                    </div>
+                
 
                     <!-- Duplicate cards for infinite scroll -->
                     <div class="team-card">
@@ -1963,6 +2043,18 @@
                             <h3 class="member-name">Hasan<br>Ali</h3>
                         </div>
                     </div>
+                    <div class="team-card">
+                        <div class="card-header">
+                            <span class="team-role">DEVELOPER</span>
+                        </div>
+                        <div class="card-image">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/zyfjcos1xkgtrixnwfia.jpg"
+                                alt="Developer" class="lazy-load" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <h3 class="member-name">Hussien<br>Mohammed</h3>
+                        </div>
+                    </div>
 
                     <div class="team-card">
                         <div class="card-header">
@@ -1992,53 +2084,66 @@
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">DESIGNER</span>
+                            <span class="team-role">MEDIA</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748618880/qwbvrxcuo700z8zdqi2g.jpg"
                                 alt="Designer" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Sara<br>Mohammed</h3>
+                            <h3 class="member-name">Elaf<br>Mohammed</h3>
                         </div>
                     </div>
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">DESIGNER</span>
+                            <span class="team-role">MEDIA</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/gt1tologlhpmtor694nk.jpg"
                                 alt="Designer" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Lina<br>Ali</h3>
+                            <h3 class="member-name">Saif<br>Hussam</h3>
                         </div>
                     </div>
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">MANAGER</span>
+                            <span class="team-role">MEDIA</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
-                                alt="Manager" class="lazy-load" loading="lazy">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/wqltditgxyk9skpksxxo.jpg"
+                                alt="MEDIA" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Omar<br>Samir</h3>
+                            <h3 class="member-name">Sajad<br>Firas</h3>
+                        </div>
+                    </div>
+
+                     <div class="team-card">
+                        <div class="card-header">
+                            <span class="team-role">MEDIA</span>
+                        </div>
+                        <div class="card-image">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/xzlcssrx6wpjy7rwpbg8.jpg"
+                                alt="MEDIA" class="lazy-load" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <h3 class="member-name">Ayham<br>Mahdi</h3>
                         </div>
                     </div>
 
                     <div class="team-card">
                         <div class="card-header">
-                            <span class="team-role">MANAGER</span>
+                            <span class="team-role">MEDIA</span>
                         </div>
                         <div class="card-image">
-                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571325/ni2wrrr54v2ep3pnef2v.jpg"
-                                alt="Manager" class="lazy-load" loading="lazy">
+                            <img data-src="https://res.cloudinary.com/dmao2zbvt/image/upload/v1748571324/wg9xa205iy3oxgknzome.jpg"
+                                alt="MEDIA" class="lazy-load" loading="lazy">
                         </div>
                         <div class="card-info">
-                            <h3 class="member-name">Nour<br>Hossam</h3>
+                            <h3 class="member-name">Aws<br>Yaas</h3>
                         </div>
                     </div>
                 </div>
@@ -2102,51 +2207,73 @@
         hamburger.addEventListener('click', () => {
             hamburger.classList.toggle('active');
             navbarMenu.classList.toggle('active');
-        });        // Carousel functionality with infinite scroll
+        });        // Enhanced Carousel functionality with seamless infinite scroll
         const carouselTrack = document.getElementById('carouselTrack');
         let isDragging = false;
         let startX, scrollLeft;
         let animationPaused = false;
+        let pauseTimeout;
 
-        // Pause animation on hover
+        // Ensure animation starts immediately
+        function ensureAnimation() {
+            carouselTrack.style.animation = 'none';
+            carouselTrack.offsetHeight; // Trigger reflow
+            carouselTrack.style.animation = null;
+        }
+
+        // Initialize animation
+        document.addEventListener('DOMContentLoaded', () => {
+            ensureAnimation();
+        });
+
+        // Pause animation on hover with smooth transition
         carouselTrack.addEventListener('mouseenter', () => {
+            clearTimeout(pauseTimeout);
             carouselTrack.style.animationPlayState = 'paused';
             animationPaused = true;
         });
 
         carouselTrack.addEventListener('mouseleave', () => {
             if (!isDragging) {
-                carouselTrack.style.animationPlayState = 'running';
-                animationPaused = false;
+                pauseTimeout = setTimeout(() => {
+                    carouselTrack.style.animationPlayState = 'running';
+                    animationPaused = false;
+                }, 200);
             }
         });
 
+        // Enhanced drag functionality
         carouselTrack.addEventListener('mousedown', (e) => {
             isDragging = true;
             startX = e.pageX - carouselTrack.offsetLeft;
             scrollLeft = carouselTrack.scrollLeft;
             carouselTrack.classList.add('dragging');
             carouselTrack.style.animationPlayState = 'paused';
+            clearTimeout(pauseTimeout);
         });
 
-        carouselTrack.addEventListener('mouseleave', () => {
+        document.addEventListener('mouseleave', () => {
             if (isDragging) {
                 isDragging = false;
                 carouselTrack.classList.remove('dragging');
                 if (!animationPaused) {
-                    carouselTrack.style.animationPlayState = 'running';
+                    pauseTimeout = setTimeout(() => {
+                        carouselTrack.style.animationPlayState = 'running';
+                    }, 300);
                 }
             }
         });
 
-        carouselTrack.addEventListener('mouseup', () => {
-            isDragging = false;
-            carouselTrack.classList.remove('dragging');
-            setTimeout(() => {
-                if (!animationPaused) {
-                    carouselTrack.style.animationPlayState = 'running';
-                }
-            }, 500);
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                carouselTrack.classList.remove('dragging');
+                pauseTimeout = setTimeout(() => {
+                    if (!animationPaused) {
+                        carouselTrack.style.animationPlayState = 'running';
+                    }
+                }, 500);
+            }
         });
 
         carouselTrack.addEventListener('mousemove', (e) => {
@@ -2157,26 +2284,42 @@
             carouselTrack.scrollLeft = scrollLeft - walk;
         });
 
-        // Touch events for mobile
+        // Enhanced touch events for mobile with better performance
         carouselTrack.addEventListener('touchstart', (e) => {
             isDragging = true;
             startX = e.touches[0].pageX - carouselTrack.offsetLeft;
             scrollLeft = carouselTrack.scrollLeft;
             carouselTrack.style.animationPlayState = 'paused';
-        });
+            clearTimeout(pauseTimeout);
+        }, { passive: true });
 
         carouselTrack.addEventListener('touchend', () => {
             isDragging = false;
-            setTimeout(() => {
+            pauseTimeout = setTimeout(() => {
                 carouselTrack.style.animationPlayState = 'running';
-            }, 500);
-        });
+            }, 300);
+        }, { passive: true });
 
         carouselTrack.addEventListener('touchmove', (e) => {
             if (!isDragging) return;
             const x = e.touches[0].pageX - carouselTrack.offsetLeft;
             const walk = (x - startX) * 2;
             carouselTrack.scrollLeft = scrollLeft - walk;
+        }, { passive: true });
+
+        // Handle animation restart for seamless loop
+        carouselTrack.addEventListener('animationiteration', () => {
+            // Ensure smooth continuation of infinite loop
+            carouselTrack.style.transform = 'translateX(0)';
+        });
+
+        // Performance optimization: Pause animation when page is not visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                carouselTrack.style.animationPlayState = 'paused';
+            } else if (!animationPaused && !isDragging) {
+                carouselTrack.style.animationPlayState = 'running';
+            }
         });
 
         // Lazy loading images
