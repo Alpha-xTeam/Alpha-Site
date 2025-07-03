@@ -1219,9 +1219,7 @@
             position: relative;
             overflow: hidden;
             margin: 0 -20px;
-        }
-
-        .carousel-track {
+        }        .carousel-track {
             display: flex;
             gap: 30px;
             width: fit-content;
@@ -1232,24 +1230,7 @@
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
-            /* Infinite scroll animation - seamless loop */
-            animation: infiniteScroll 60s linear infinite;
-        }
-
-        /* Seamless infinite scroll animation */
-        @keyframes infiniteScroll {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(calc(-350px * 11));
-                /* Move exactly one set of cards */
-            }
-        }
-
-        .carousel-track:hover {
-            animation-play-state: paused;
+            transition: transform 0.1s ease-out;
         }
 
         .carousel-track:active {
@@ -1258,7 +1239,7 @@
 
         .carousel-track.dragging {
             cursor: grabbing !important;
-            animation-play-state: paused !important;
+            transition: none !important;
         }
 
         .carousel-track img {
@@ -1273,9 +1254,7 @@
         .carousel-container {
             mask: linear-gradient(to right, transparent, black 50px, black calc(100% - 50px), transparent);
             -webkit-mask: linear-gradient(to right, transparent, black 50px, black calc(100% - 50px), transparent);
-        }
-
-        /* Enhanced performance for smooth animation */
+        }        /* Enhanced performance for smooth animation */
         .carousel-track {
             backface-visibility: hidden;
             perspective: 1000px;
@@ -1285,60 +1264,6 @@
         .team-card {
             backface-visibility: hidden;
             transform: translateZ(0);
-        }
-
-        /* Responsive animations */
-        @media (max-width: 1200px) {
-            .carousel-track {
-                animation-duration: 50s;
-            }
-
-            @keyframes infiniteScroll {
-                0% {
-                    transform: translateX(0);
-                }
-
-                100% {
-                    transform: translateX(calc(-310px * 11));
-                    /* Adjusted for smaller cards */
-                }
-            }
-        }
-
-        @media (max-width: 768px) {
-            .carousel-track {
-                animation-duration: 45s;
-                gap: 20px;
-            }
-
-            @keyframes infiniteScroll {
-                0% {
-                    transform: translateX(0);
-                }
-
-                100% {
-                    transform: translateX(calc(-280px * 11));
-                    /* Adjusted for mobile cards */
-                }
-            }
-        }
-
-        @media (max-width: 480px) {
-            .carousel-track {
-                animation-duration: 40s;
-                gap: 15px;
-            }
-
-            @keyframes infiniteScroll {
-                0% {
-                    transform: translateX(0);
-                }
-
-                100% {
-                    transform: translateX(calc(-235px * 11));
-                    /* Adjusted for smallest cards */
-                }
-            }
         }
 
         /* Enhanced team card cursor for better UX */
@@ -2689,119 +2614,137 @@
         hamburger.addEventListener('click', () => {
             hamburger.classList.toggle('active');
             navbarMenu.classList.toggle('active');
-        });        // Enhanced Carousel functionality with seamless infinite scroll
+        });        // Enhanced Carousel functionality with mouse drag and infinite scroll
         const carouselTrack = document.getElementById('carouselTrack');
         let isDragging = false;
-        let startX, scrollLeft;
-        let animationPaused = false;
-        let pauseTimeout;
+        let startX = 0;
+        let currentTransform = 0;
+        let isAutoScrolling = true;
+        let animationId;
+        
+        // Carousel settings
+        const scrollSpeed = 1.2; // Speed of auto-scroll
+        const cardWidth = 320; // Width of each card
+        const cardGap = 30; // Gap between cards
+        const cardWithGap = cardWidth + cardGap;
+        const totalCards = 11; // Number of unique team members
+        const resetPoint = -(cardWithGap * totalCards);
 
-        // Ensure animation starts immediately
-        function ensureAnimation() {
-            carouselTrack.style.animation = 'none';
-            carouselTrack.offsetHeight; // Trigger reflow
-            carouselTrack.style.animation = null;
+        // Auto-scroll function for infinite movement
+        function autoScroll() {
+            if (isAutoScrolling && !isDragging) {
+                currentTransform -= scrollSpeed;
+                
+                // Reset to beginning when reaching the end for seamless loop
+                if (currentTransform <= resetPoint) {
+                    currentTransform = 0;
+                }
+                
+                carouselTrack.style.transform = `translateX(${currentTransform}px)`;
+            }
+            animationId = requestAnimationFrame(autoScroll);
         }
 
-        // Initialize animation
-        document.addEventListener('DOMContentLoaded', () => {
-            ensureAnimation();
-        });
+        // Start auto-scroll
+        autoScroll();
 
-        // Pause animation on hover with smooth transition
-        carouselTrack.addEventListener('mouseenter', () => {
-            clearTimeout(pauseTimeout);
-            carouselTrack.style.animationPlayState = 'paused';
-            animationPaused = true;
-        });
+        // Mouse drag functionality
+        let startDragX = 0;
+        let lastTransform = 0;
 
-        carouselTrack.addEventListener('mouseleave', () => {
-            if (!isDragging) {
-                pauseTimeout = setTimeout(() => {
-                    carouselTrack.style.animationPlayState = 'running';
-                    animationPaused = false;
-                }, 200);
-            }
-        });
-
-        // Enhanced drag functionality
         carouselTrack.addEventListener('mousedown', (e) => {
             isDragging = true;
-            startX = e.pageX - carouselTrack.offsetLeft;
-            scrollLeft = carouselTrack.scrollLeft;
+            startDragX = e.clientX;
+            lastTransform = currentTransform;
             carouselTrack.classList.add('dragging');
-            carouselTrack.style.animationPlayState = 'paused';
-            clearTimeout(pauseTimeout);
+            carouselTrack.style.cursor = 'grabbing';
+            isAutoScrolling = false; // Pause auto-scroll while dragging
         });
 
-        document.addEventListener('mouseleave', () => {
-            if (isDragging) {
-                isDragging = false;
-                carouselTrack.classList.remove('dragging');
-                if (!animationPaused) {
-                    pauseTimeout = setTimeout(() => {
-                        carouselTrack.style.animationPlayState = 'running';
-                    }, 300);
-                }
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const dragDistance = e.clientX - startDragX;
+            currentTransform = lastTransform + dragDistance;
+            
+            // Normalize transform for infinite loop
+            while (currentTransform > 0) {
+                currentTransform -= Math.abs(resetPoint);
             }
+            while (currentTransform <= resetPoint) {
+                currentTransform += Math.abs(resetPoint);
+            }
+            
+            carouselTrack.style.transform = `translateX(${currentTransform}px)`;
         });
 
         document.addEventListener('mouseup', () => {
             if (isDragging) {
                 isDragging = false;
                 carouselTrack.classList.remove('dragging');
-                pauseTimeout = setTimeout(() => {
-                    if (!animationPaused) {
-                        carouselTrack.style.animationPlayState = 'running';
-                    }
-                }, 500);
+                carouselTrack.style.cursor = 'grab';
+                
+                // Resume auto-scroll after a short delay
+                setTimeout(() => {
+                    isAutoScrolling = true;
+                }, 1000);
             }
         });
 
-        carouselTrack.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            e.preventDefault();
-            const x = e.pageX - carouselTrack.offsetLeft;
-            const walk = (x - startX) * 2;
-            carouselTrack.scrollLeft = scrollLeft - walk;
-        });
+        // Touch events for mobile
+        let startTouchX = 0;
 
-        // Enhanced touch events for mobile with better performance
         carouselTrack.addEventListener('touchstart', (e) => {
             isDragging = true;
-            startX = e.touches[0].pageX - carouselTrack.offsetLeft;
-            scrollLeft = carouselTrack.scrollLeft;
-            carouselTrack.style.animationPlayState = 'paused';
-            clearTimeout(pauseTimeout);
-        }, { passive: true });
-
-        carouselTrack.addEventListener('touchend', () => {
-            isDragging = false;
-            pauseTimeout = setTimeout(() => {
-                carouselTrack.style.animationPlayState = 'running';
-            }, 300);
+            startTouchX = e.touches[0].clientX;
+            lastTransform = currentTransform;
+            isAutoScrolling = false;
         }, { passive: true });
 
         carouselTrack.addEventListener('touchmove', (e) => {
             if (!isDragging) return;
-            const x = e.touches[0].pageX - carouselTrack.offsetLeft;
-            const walk = (x - startX) * 2;
-            carouselTrack.scrollLeft = scrollLeft - walk;
+            
+            const dragDistance = e.touches[0].clientX - startTouchX;
+            currentTransform = lastTransform + dragDistance;
+            
+            // Normalize transform for infinite loop
+            while (currentTransform > 0) {
+                currentTransform -= Math.abs(resetPoint);
+            }
+            while (currentTransform <= resetPoint) {
+                currentTransform += Math.abs(resetPoint);
+            }
+            
+            carouselTrack.style.transform = `translateX(${currentTransform}px)`;
         }, { passive: true });
 
-        // Handle animation restart for seamless loop
-        carouselTrack.addEventListener('animationiteration', () => {
-            // Ensure smooth continuation of infinite loop
-            carouselTrack.style.transform = 'translateX(0)';
+        carouselTrack.addEventListener('touchend', () => {
+            if (isDragging) {
+                isDragging = false;
+                
+                // Resume auto-scroll after a short delay
+                setTimeout(() => {
+                    isAutoScrolling = true;
+                }, 1000);
+            }
+        }, { passive: true });
+
+        // Pause auto-scroll on hover
+        carouselTrack.addEventListener('mouseenter', () => {
+            isAutoScrolling = false;
         });
 
-        // Performance optimization: Pause animation when page is not visible
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                carouselTrack.style.animationPlayState = 'paused';
-            } else if (!animationPaused && !isDragging) {
-                carouselTrack.style.animationPlayState = 'running';
+        carouselTrack.addEventListener('mouseleave', () => {
+            if (!isDragging) {
+                setTimeout(() => {
+                    isAutoScrolling = true;
+                }, 500);
             }
+        });
+
+        // Prevent image dragging
+        carouselTrack.addEventListener('dragstart', (e) => {
+            e.preventDefault();
         });
 
         // Lazy loading images
@@ -2815,52 +2758,33 @@
                     observer.unobserve(img);
                 }
             });
-        });        lazyLoadImages.forEach(image => {
-            imageObserver.observe(image);
         });
 
-        // Scroll Animation Observer
+        lazyLoadImages.forEach(image => {
+            imageObserver.observe(image);
+        });        // Enhanced Scroll Animation Observer - works in both directions
         const scrollAnimateElements = document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right, .scroll-animate-scale, .scroll-animate-rotate');
         
-        const scrollObserverOptions = {
-            root: null,
-            rootMargin: '0px 0px -100px 0px',
-            threshold: 0.1
-        };
-
-        const scrollObserver = new IntersectionObserver((entries) => {
+        const enhancedScrollObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Add the animate class to trigger the animation
+                    // Add animate class when element comes into view
                     entry.target.classList.add('animate');
-                }
-            });
-        }, scrollObserverOptions);
-
-        // Observe all scroll animation elements
-        scrollAnimateElements.forEach(element => {
-            scrollObserver.observe(element);
-        });
-
-        // Re-observe elements when they go out of view (for repeated animations)
-        const repeatScrollObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting && entry.target.classList.contains('animate')) {
-                    // Remove animate class when element is far out of view
-                    if (entry.boundingClientRect.top > window.innerHeight || entry.boundingClientRect.bottom < -100) {
-                        entry.target.classList.remove('animate');
-                    }
+                } else {
+                    // Remove animate class when element goes out of view
+                    // This allows the animation to trigger again when scrolling back
+                    entry.target.classList.remove('animate');
                 }
             });
         }, {
             root: null,
-            rootMargin: '200px 0px 200px 0px',
-            threshold: 0
+            rootMargin: '50px 0px 50px 0px', // Trigger animation slightly before element is fully visible
+            threshold: 0.15 // Trigger when 15% of element is visible
         });
 
-        // Observe for repeat animations
+        // Observe all scroll animation elements
         scrollAnimateElements.forEach(element => {
-            repeatScrollObserver.observe(element);
+            enhancedScrollObserver.observe(element);
         });
     </script>
 </body>
